@@ -18,9 +18,10 @@
             scene: { preload, create, update }
         };
         const game = new Phaser.Game(config);
-        let credits = 0, betAmount = 1, winStreak = 0;
+        let credits = 0, betAmount = 1, selectedLines = 1, selectedCols = 1;
         const rows = 3, cols = 5;
         const symbols = ['slot1', 'slot2', 'slot3', 'slot4', 'slot5', 'slot6', 'slot7', 'slot8', 'slot9', 'wild'];
+        const creditPassword = "1234";
 
         function preload() {
             this.load.image('background', 'assets/carnival_bg.png');
@@ -49,14 +50,17 @@
             this.creditButton = this.add.text(500, 500, 'Adicionar Créditos', { fontSize: '24px', fill: '#FFF' })
                 .setInteractive()
                 .on('pointerdown', addCredits, this);
-
-            this.creditText = this.add.text(50, 50, `Créditos: ${credits}`, { fontSize: '24px', fill: '#FFF' });
+            
             this.betText = this.add.text(50, 80, `Aposta: ${betAmount}`, { fontSize: '24px', fill: '#FFF' });
+            this.lineText = this.add.text(50, 110, `Linhas: ${selectedLines}`, { fontSize: '24px', fill: '#FFF' });
+            this.colText = this.add.text(50, 140, `Colunas: ${selectedCols}`, { fontSize: '24px', fill: '#FFF' });
+            this.creditText = this.add.text(50, 50, `Créditos: ${credits}`, { fontSize: '24px', fill: '#FFF' });
         }
 
         function spinReels() {
-            if (credits < betAmount) return;
-            credits -= betAmount;
+            let totalBet = betAmount * selectedLines * selectedCols;
+            if (credits < totalBet) return;
+            credits -= totalBet;
             this.creditText.setText(`Créditos: ${credits}`);
             this.spinSound.play();
             
@@ -74,7 +78,7 @@
             let win = false;
             let payout = 0;
             
-            for (let r = 0; r < rows; r++) {
+            for (let r = 0; r < selectedLines; r++) {
                 let firstSymbol = this.reels[r][0].texture.key;
                 let matchCount = this.reels[r].filter(slot => slot.texture.key === firstSymbol || slot.texture.key === 'wild').length;
                 if (matchCount >= 3) {
@@ -83,7 +87,7 @@
                 }
             }
             
-            for (let c = 0; c < cols; c++) {
+            for (let c = 0; c < selectedCols; c++) {
                 let firstSymbol = this.reels[0][c].texture.key;
                 let matchCount = this.reels.map(row => row[c]).filter(slot => slot.texture.key === firstSymbol || slot.texture.key === 'wild').length;
                 if (matchCount >= 3) {
@@ -93,23 +97,25 @@
             }
             
             if (win) {
-                winStreak++;
                 this.winSound.play();
                 credits += payout;
                 this.creditText.setText(`Créditos: ${credits}`);
-            } else {
-                winStreak = 0;
             }
         }
 
         function addCredits() {
+            let password = prompt("Digite a senha para adicionar créditos:");
+            if (password !== creditPassword) {
+                alert("Senha incorreta!");
+                return;
+            }
             let amount = parseInt(prompt("Digite a quantidade de créditos:"), 10);
             if (!isNaN(amount) && amount > 0) {
                 credits += amount;
                 this.creditText.setText(`Créditos: ${credits}`);
             }
         }
-
+        
         function update() {}
     </script>
 </body>
