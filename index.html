@@ -20,7 +20,7 @@
         const game = new Phaser.Game(config);
         let credits = 0, betAmount = 1, winStreak = 0;
         const rows = 3, cols = 5;
-        const symbolSize = 100; // Tamanho padrão para os símbolos
+        const symbolSize = 100;
         const symbols = ['slot1', 'slot2', 'slot3', 'slot4', 'slot5', 'slot6', 'slot7', 'slot8', 'slot9', 'wild', 'scatter'];
 
         function preload() {
@@ -40,7 +40,7 @@
                 this.reels[r] = [];
                 for (let c = 0; c < cols; c++) {
                     let slot = this.add.image(200 + c * 120, 100 + r * 120, Phaser.Utils.Array.GetRandom(symbols));
-                    slot.setDisplaySize(symbolSize, symbolSize); // Ajustando o tamanho das imagens
+                    slot.setDisplaySize(symbolSize, symbolSize);
                     this.reels[r][c] = slot;
                 }
             }
@@ -59,15 +59,40 @@
             this.creditText.setText(`Créditos: ${credits}`);
             this.spinSound.play();
             
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const randomSymbol = Phaser.Utils.Array.GetRandom(symbols);
-                    this.reels[r][c].setTexture(randomSymbol);
-                    this.reels[r][c].setDisplaySize(symbolSize, symbolSize); // Aplicar tamanho fixo sempre que trocar
-                }
+            let delay = 0;
+            for (let c = 0; c < cols; c++) {
+                setTimeout(() => spinColumn.call(this, c), delay);
+                delay += 200; // Cada rolo gira um pouco depois do anterior
             }
-            
-            checkWin.call(this);
+        }
+
+        function spinColumn(col) {
+            let spinDuration = 1000; // Tempo total da animação do rolo
+            let elapsed = 0;
+            let spinInterval = setInterval(() => {
+                for (let r = 0; r < rows; r++) {
+                    let randomSymbol = Phaser.Utils.Array.GetRandom(symbols);
+                    this.reels[r][col].setTexture(randomSymbol);
+                    this.reels[r][col].setDisplaySize(symbolSize, symbolSize);
+                }
+                elapsed += 100;
+                if (elapsed >= spinDuration) {
+                    clearInterval(spinInterval);
+                    stopColumn.call(this, col);
+                }
+            }, 100);
+        }
+
+        function stopColumn(col) {
+            for (let r = 0; r < rows; r++) {
+                let finalSymbol = Phaser.Utils.Array.GetRandom(symbols);
+                this.reels[r][col].setTexture(finalSymbol);
+                this.reels[r][col].setDisplaySize(symbolSize, symbolSize);
+            }
+
+            if (col === cols - 1) {
+                setTimeout(() => checkWin.call(this), 500);
+            }
         }
 
         function checkWin() {
