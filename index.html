@@ -7,15 +7,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
     <style>
         body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
-        .input-container { position: absolute; top: 20px; left: 20px; color: white; }
     </style>
 </head>
 <body>
-    <div class="input-container">
-        <input type="password" id="password" placeholder="Senha">
-        <input type="number" id="creditAmount" placeholder="Valor">
-        <button onclick="addCredits()">Adicionar Créditos</button>
-    </div>
     <script>
         const config = {
             type: Phaser.AUTO,
@@ -26,8 +20,8 @@
         const game = new Phaser.Game(config);
         let credits = 0, betAmount = 1, winStreak = 0;
         const rows = 3, cols = 5;
+        const symbolSize = 100; // Tamanho padrão para os símbolos
         const symbols = ['slot1', 'slot2', 'slot3', 'slot4', 'slot5', 'slot6', 'slot7', 'slot8', 'slot9', 'wild', 'scatter'];
-        const correctPassword = "1234";
 
         function preload() {
             this.load.image('background', 'assets/carnival_bg.png');
@@ -45,7 +39,9 @@
             for (let r = 0; r < rows; r++) {
                 this.reels[r] = [];
                 for (let c = 0; c < cols; c++) {
-                    this.reels[r][c] = this.add.image(200 + c * 120, 100 + r * 120, Phaser.Utils.Array.GetRandom(symbols));
+                    let slot = this.add.image(200 + c * 120, 100 + r * 120, Phaser.Utils.Array.GetRandom(symbols));
+                    slot.setDisplaySize(symbolSize, symbolSize); // Ajustando o tamanho das imagens
+                    this.reels[r][c] = slot;
                 }
             }
 
@@ -67,6 +63,7 @@
                 for (let c = 0; c < cols; c++) {
                     const randomSymbol = Phaser.Utils.Array.GetRandom(symbols);
                     this.reels[r][c].setTexture(randomSymbol);
+                    this.reels[r][c].setDisplaySize(symbolSize, symbolSize); // Aplicar tamanho fixo sempre que trocar
                 }
             }
             
@@ -115,21 +112,6 @@
                 this.creditText.setText(`Créditos: ${credits}`);
             } else {
                 winStreak = 0;
-            }
-        }
-
-        function addCredits() {
-            const passwordInput = document.getElementById("password").value;
-            const creditAmount = parseInt(document.getElementById("creditAmount").value);
-            
-            if (passwordInput === correctPassword && creditAmount > 0) {
-                credits += creditAmount;
-                alert("Créditos adicionados com sucesso!");
-                document.getElementById("password").value = "";
-                document.getElementById("creditAmount").value = "";
-                game.scene.scenes[0].creditText.setText(`Créditos: ${credits}`);
-            } else {
-                alert("Senha incorreta ou valor inválido!");
             }
         }
 
