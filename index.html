@@ -7,9 +7,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
     <style>
         body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
+        #credit-form { position: absolute; top: 10px; left: 10px; background: white; padding: 10px; border-radius: 5px; display: flex; flex-direction: column; }
     </style>
 </head>
 <body>
+    <div id="credit-form">
+        <input type="password" id="password" placeholder="Senha">
+        <input type="number" id="credit-amount" placeholder="Valor">
+        <button onclick="addCredits()">Adicionar Créditos</button>
+    </div>
+
     <script>
         const config = {
             type: Phaser.AUTO,
@@ -22,6 +29,7 @@
         const rows = 3, cols = 5;
         const symbolSize = 100;
         const symbols = ['slot1', 'slot2', 'slot3', 'slot4', 'slot5', 'slot6', 'slot7', 'slot8', 'slot9', 'wild', 'scatter'];
+        const correctPassword = "1234"; // Defina a senha aqui
 
         function preload() {
             this.load.image('background', 'assets/carnival_bg.png');
@@ -62,12 +70,12 @@
             let delay = 0;
             for (let c = 0; c < cols; c++) {
                 setTimeout(() => spinColumn.call(this, c), delay);
-                delay += 200; // Cada rolo gira um pouco depois do anterior
+                delay += 200;
             }
         }
 
         function spinColumn(col) {
-            let spinDuration = 1000; // Tempo total da animação do rolo
+            let spinDuration = 1000;
             let elapsed = 0;
             let spinInterval = setInterval(() => {
                 for (let r = 0; r < rows; r++) {
@@ -141,6 +149,21 @@
         }
 
         function update() {}
+
+        function addCredits() {
+            let password = document.getElementById("password").value;
+            let amount = parseInt(document.getElementById("credit-amount").value);
+            
+            if (password === correctPassword && amount > 0) {
+                credits += amount;
+                document.getElementById("password").value = "";
+                document.getElementById("credit-amount").value = "";
+                alert(`Créditos adicionados: ${amount}`);
+                game.scene.scenes[0].creditText.setText(`Créditos: ${credits}`);
+            } else {
+                alert("Senha incorreta ou valor inválido!");
+            }
+        }
     </script>
 </body>
 </html>
