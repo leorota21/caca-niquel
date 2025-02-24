@@ -1,120 +1,50 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caça-Níquel Carnaval</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
-    <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
-        .button { padding: 10px 20px; background: #ffcc00; color: #000; border-radius: 5px; cursor: pointer; font-size: 20px; }
-        .button:hover { background: #ffaa00; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo de Caça-Níquel</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <script>
-        const config = {
-            type: Phaser.AUTO,
-            width: 1000,
-            height: 600,
-            scene: { preload, create, update }
-        };
-        const game = new Phaser.Game(config);
-        let credits = 0, betAmount = 1, selectedLines = 3, selectedCols = 3;
-        const rows = 3, cols = 5;
-        const symbols = ['slot1', 'slot2', 'slot3', 'slot4', 'slot5', 'slot6', 'slot7', 'slot8', 'slot9', 'wild'];
-        const creditPassword = "1234";
-        let winStreak = 0;
+  <div class="game-container">
+    <h1>Caça-Níquel</h1>
+    
+    <!-- Painel de Créditos -->
+    <div class="credit-panel">
+      <span>Créditos: </span><span id="credit-display">100</span>
+    </div>
 
-        function preload() {
-            this.load.image('background', 'assets/carnival_bg.png');
-            symbols.forEach(symbol => this.load.image(symbol, `assets/${symbol}.png`));
-            this.load.audio('spin', 'assets/spin_sound.mp3');
-            this.load.audio('win', 'assets/win_sound.mp3');
-            this.load.audio('lose', 'assets/lose_sound.mp3');
-        }
+    <!-- Painel de Aposta -->
+    <div class="bet-panel">
+      <label for="bet-amount">Créditos por linha:</label>
+      <input type="number" id="bet-amount" value="1" min="1">
+      <label for="lines">Linhas:</label>
+      <input type="number" id="lines" value="1" min="1" max="3">
+    </div>
+    
+    <!-- Botão de Adicionar Créditos com Senha -->
+    <div class="add-credits">
+      <input type="password" id="password" placeholder="Senha">
+      <button onclick="addCredits()">Adicionar Créditos</button>
+    </div>
 
-        function create() {
-            this.add.image(500, 300, 'background');
-            this.spinSound = this.sound.add('spin');
-            this.winSound = this.sound.add('win');
-            this.loseSound = this.sound.add('lose');
-            
-            this.reels = [];
-            for (let r = 0; r < rows; r++) {
-                this.reels[r] = [];
-                for (let c = 0; c < cols; c++) {
-                    this.reels[r][c] = this.add.image(200 + c * 120, 100 + r * 120, Phaser.Utils.Array.GetRandom(symbols)).setDisplaySize(100, 100);
-                }
-            }
+    <!-- Colunas -->
+    <div class="slot-machine">
+      <div class="slot" id="slot-1"></div>
+      <div class="slot" id="slot-2"></div>
+      <div class="slot" id="slot-3"></div>
+      <div class="slot" id="slot-4"></div>
+      <div class="slot" id="slot-5"></div>
+    </div>
 
-            this.spinButton = this.add.text(350, 500, 'Girar', { fontSize: '32px', fill: '#FFF', backgroundColor: '#ffcc00' })
-                .setInteractive()
-                .on('pointerdown', spinReels, this);
-            
-            this.creditButton = this.add.text(500, 500, 'Adicionar Créditos', { fontSize: '24px', fill: '#FFF', backgroundColor: '#ffcc00' })
-                .setInteractive()
-                .on('pointerdown', addCredits, this);
-            
-            this.betText = this.add.text(50, 80, `Aposta: ${betAmount}`, { fontSize: '24px', fill: '#FFF' });
-            this.creditText = this.add.text(50, 50, `Créditos: ${credits}`, { fontSize: '24px', fill: '#FFF' });
-        }
+    <!-- Botão de Giro -->
+    <button onclick="spin()">Girar</button>
 
-        function spinReels() {
-            let totalBet = betAmount * selectedLines * selectedCols;
-            if (credits < totalBet) return;
-            credits -= totalBet;
-            this.creditText.setText(`Créditos: ${credits}`);
-            this.spinSound.play();
-            
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const randomSymbol = Phaser.Utils.Array.GetRandom(symbols);
-                    this.reels[r][c].setTexture(randomSymbol);
-                }
-            }
-            
-            checkWin.call(this);
-        }
-
-        function checkWin() {
-            let win = false;
-            let payout = 0;
-            
-            for (let r = 0; r < selectedLines; r++) {
-                let firstSymbol = this.reels[r][0].texture.key;
-                let matchCount = this.reels[r].filter(slot => slot.texture.key === firstSymbol || slot.texture.key === 'wild').length;
-                if (matchCount >= 3) {
-                    win = true;
-                    payout += betAmount * (1.5 + winStreak * 0.5);
-                }
-            }
-            
-            if (win) {
-                this.winSound.play();
-                winStreak++;
-                credits += payout;
-            } else {
-                this.loseSound.play();
-                winStreak = 0;
-            }
-            this.creditText.setText(`Créditos: ${credits}`);
-        }
-
-        function addCredits() {
-            let password = prompt("Digite a senha para adicionar créditos:");
-            if (password !== creditPassword) {
-                alert("Senha incorreta!");
-                return;
-            }
-            let amount = parseInt(prompt("Digite a quantidade de créditos:"), 10);
-            if (!isNaN(amount) && amount > 0) {
-                credits += amount;
-                this.creditText.setText(`Créditos: ${credits}`);
-            }
-        }
-        
-        function update() {}
-    </script>
+    <!-- Resultado -->
+    <div id="result"></div>
+  </div>
+  
+  <script src="script.js"></script>
 </body>
 </html>
