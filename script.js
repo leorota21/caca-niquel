@@ -1,13 +1,16 @@
 // Variáveis Globais
 let credits = 100;
-let betAmount = 10;
-let linesBet = 1;
+let betColumn1 = 10;
+let betColumn2 = 10;
+let betColumn3 = 10;
 const icons = ['🍒', '🍋', '🍉', '🍇', '🍀', '💎', '7️⃣', '🍊', '🍒'];  // Ícones de cassino
 let winAmount = 0;
 
 // Elementos da Interface
 const creditCount = document.getElementById('credit-count');
-const betLinesInput = document.getElementById('bet-lines');
+const betColumn1Input = document.getElementById('bet-column-1');
+const betColumn2Input = document.getElementById('bet-column-2');
+const betColumn3Input = document.getElementById('bet-column-3');
 const spinButton = document.getElementById('spin-button');
 const resultText = document.getElementById('result');
 const winIcon = document.getElementById('win-icon');
@@ -27,13 +30,6 @@ document.getElementById('add-credits-button').addEventListener('click', () => {
     updateCredits();
 });
 
-// Ajustar Linhas de Aposta
-betLinesInput.addEventListener('change', () => {
-    linesBet = parseInt(betLinesInput.value);
-    betAmount = linesBet * 10;
-    document.getElementById('line-bet').textContent = betAmount;
-});
-
 // Função para gerar ícones aleatórios
 function getRandomIcon() {
     return icons[Math.floor(Math.random() * icons.length)];
@@ -41,12 +37,19 @@ function getRandomIcon() {
 
 // Função de Giro
 function spinSlots() {
-    if (credits < betAmount) {
+    // Atualizar valores das apostas
+    betColumn1 = parseInt(betColumn1Input.value);
+    betColumn2 = parseInt(betColumn2Input.value);
+    betColumn3 = parseInt(betColumn3Input.value);
+
+    const totalBet = betColumn1 + betColumn2 + betColumn3;
+
+    if (credits < totalBet) {
         alert("Créditos insuficientes!");
         return;
     }
 
-    credits -= betAmount;
+    credits -= totalBet;
     updateCredits();
     spinSound.play();
 
@@ -62,15 +65,18 @@ function spinSlots() {
     setTimeout(checkWin, 2000);  // Verificar vitória após 2s
 }
 
-// Verificar Vitória
+// Função de Verificação de Vitória
 function checkWin() {
     const symbols = Array.from(slots).map(slot => slot.textContent);
-    const isWin = symbols.every(symbol => symbol === symbols[0]);
 
-    if (isWin) {
-        winAmount = betAmount * 2 * linesBet;
-        credits += winAmount;
-        resultText.textContent = `Você ganhou ${winAmount} créditos!`;
+    let win = 0;
+    if (symbols[0] === symbols[1] && symbols[1] === symbols[2]) win += betColumn1;
+    if (symbols[2] === symbols[3] && symbols[3] === symbols[4]) win += betColumn2;
+    if (symbols[0] === symbols[4]) win += betColumn3;
+
+    if (win > 0) {
+        credits += win;
+        resultText.textContent = `Você ganhou ${win} créditos!`;
         winIcon.style.display = 'block';
         winSound.play();
     } else {
