@@ -3,51 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo de Caça-Níquel Avançado</title>
+    <title>Caça-Níquel Moderno</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>Caça-Níquel Avançado</h1>
-        
-        <!-- Seletor de Tema -->
-        <div class="theme-selector">
-            <label for="theme">Escolha o Tema:</label>
-            <select id="theme">
-                <option value="classic">Clássico</option>
-                <option value="neon">Neon</option>
-                <option value="retro">Retro</option>
-                <option value="space">Espacial</option>
-            </select>
-        </div>
+        <h1>Caça-Níquel Moderno</h1>
 
-        <!-- Créditos -->
-        <div class="credit-panel">
-            <p><strong>Créditos: <span id="credit-count">100</span></strong></p>
-            <button id="add-credits-button">Adicionar Créditos</button>
-        </div>
+        <!-- Créditos e Painel de Controle -->
+        <div class="control-panel">
+            <div class="credit-panel">
+                <p><strong>Créditos: <span id="credit-count">100</span></strong></p>
+                <button id="add-credits-button">Adicionar Créditos</button>
+            </div>
 
-        <!-- Linhas de Aposta -->
-        <div class="bet-panel">
-            <label for="bet-lines">Escolha as Linhas de Aposta:</label>
-            <input type="number" id="bet-lines" min="1" max="3" value="1">
-            <p>Aposta por linha: <span id="line-bet">10</span> créditos</p>
+            <div class="bet-panel">
+                <label for="bet-lines">Linhas de Aposta:</label>
+                <input type="number" id="bet-lines" min="1" max="5" value="1">
+                <p>Aposta por linha: <span id="line-bet">10</span> créditos</p>
+            </div>
+
+            <button id="spin-button" class="spin-button">Girar</button>
         </div>
 
         <!-- Máquina de Slots -->
         <div class="slot-machine">
-            <div class="slot" id="slot1">🍒</div>
-            <div class="slot" id="slot2">🍋</div>
-            <div class="slot" id="slot3">🍊</div>
+            <div class="slot" id="slot1"></div>
+            <div class="slot" id="slot2"></div>
+            <div class="slot" id="slot3"></div>
         </div>
 
-        <!-- Rodar o Jogo -->
-        <button id="spin-button">Girar</button>
-
-        <!-- Resultado -->
-        <div id="result">Resultado</div>
-
-        <!-- Ícone de Vitória -->
+        <!-- Resultado e Efeitos -->
+        <div id="result" class="result">Resultado</div>
         <img id="win-icon" class="win-icon" src="win-icon.png" alt="Ícone de Vitória" style="display:none;">
 
         <!-- Efeitos Sonoros -->
