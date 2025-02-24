@@ -1,88 +1,64 @@
-// Variáveis globais
-let credits = 100;
-let betAmount = 1;
-let lines = 1;
-let symbols = ['🍒', '🍋', '🍊', '🍉', '🔔', '⭐'];
-let spinInProgress = false;  // Para evitar que o usuário gire enquanto a animação está acontecendo
+// Obter os elementos de áudio
+const spinSound = document.getElementById("spin-sound");
+const winSound = document.getElementById("win-sound");
 
-// Função para adicionar créditos com senha
-function addCredits() {
-  const password = document.getElementById('password').value;
-  
-  if (password === '1234') {  // Senha para adicionar créditos
-    credits += 100;  // Adiciona 100 créditos
-    document.getElementById('credit-display').innerText = credits;
-    alert('Créditos adicionados com sucesso!');
-  } else {
-    alert('Senha incorreta!');
-  }
+// Função que toca o som de "giro"
+function playSpinSound() {
+  spinSound.play();
 }
 
-// Função para girar as colunas
-function spin() {
-  if (spinInProgress) return; // Impede novo giro enquanto animação anterior não terminar
-  if (credits < betAmount * lines) {
-    alert('Créditos insuficientes!');
-    return;
-  }
+// Função que toca o som de "vitória"
+function playWinSound() {
+  winSound.play();
+}
 
-  // Deduz os créditos apostados
-  credits -= betAmount * lines;
-  document.getElementById('credit-display').innerText = credits;
+// Exemplo de como integrar ao botão de girar
+document.getElementById("spin-button").addEventListener("click", function() {
+  playSpinSound();
+  spinSlots(); // Função de girar os slots
+});
 
-  // Inicia a animação
-  spinInProgress = true;
-  let slotElements = [];
-  for (let i = 1; i <= 5; i++) {
-    let slot = document.getElementById('slot-' + i);
-    slotElements.push(slot);
-    slot.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-    slot.classList.add('spin');
-  }
+// Função para girar os slots com animação
+function spinSlots() {
+  // Adicionar a classe 'spin' a todos os slots para a animação
+  const slots = document.querySelectorAll(".slot");
+  slots.forEach(slot => {
+    slot.classList.add("spin");
 
-  // Função para parar a animação e checar os resultados
+    // Remover a classe de animação após o término para que possa ser reiniciada
+    setTimeout(() => {
+      slot.classList.remove("spin");
+    }, 1500);  // A duração da animação (1.5 segundos)
+  });
+
+  // Verificar se houve vitória após a animação
   setTimeout(() => {
-    // Parar a animação e mostrar o resultado final
-    for (let i = 0; i < slotElements.length; i++) {
-      slotElements[i].classList.remove('spin');
-      slotElements[i].innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-    }
-
-    checkWin(slotElements);  // Verifica se o jogador ganhou
-    spinInProgress = false;
-  }, 1500);  // 1.5 segundos de animação
+    checkWin();
+  }, 1500);
 }
 
-// Função para checar se houve vitória
-function checkWin(slotElements) {
-  let win = false;
-  let winningCombination = [];
-  
-  // Verifica se o jogador acertou uma combinação
-  for (let i = 0; i < lines; i++) {
-    if (slotElements[i].innerHTML === slotElements[i + 1].innerHTML && slotElements[i].innerHTML === slotElements[i + 2].innerHTML) {
-      win = true;
-      winningCombination = [slotElements[i].innerHTML, slotElements[i + 1].innerHTML, slotElements[i + 2].innerHTML];
-      break;
-    }
-  }
+// Função para exibir o resultado
+function showResult(isWin) {
+  const resultText = document.getElementById("result");
+  const resultIcon = document.getElementById("win-icon");
 
-  // Exibe o resultado
-  if (win) {
-    let payout = betAmount * lines * 10;  // Multiplicador de pagamento
-    credits += payout;
-    document.getElementById('credit-display').innerText = credits;
-    document.getElementById('result').innerText = `Você ganhou: ${payout} créditos! Com a combinação: ${winningCombination.join(' ')}`;
+  if (isWin) {
+    resultText.textContent = "Você venceu!";
+    resultIcon.style.display = "block";  // Mostrar o ícone de vitória
+    playWinSound(); // Tocar som de vitória
   } else {
-    document.getElementById('result').innerText = 'Você perdeu! Tente novamente.';
+    resultText.textContent = "Você perdeu!";
+    resultIcon.style.display = "none";  // Esconder o ícone
   }
 }
 
-// Atualizar valores de aposta e linhas
-document.getElementById('bet-amount').addEventListener('input', function () {
-  betAmount = parseInt(this.value);
-});
+// Função para verificar vitória (exemplo simples)
+function checkWin() {
+  const slots = document.querySelectorAll(".slot");
+  const symbols = Array.from(slots).map(slot => slot.textContent);
 
-document.getElementById('lines').addEventListener('input', function () {
-  lines = parseInt(this.value);
-});
+  // Aqui você pode definir uma lógica para verificar combinações vencedoras
+  const isWin = symbols[0] === symbols[1] && symbols[1] === symbols[2]; // Exemplo de condição de vitória
+
+  showResult(isWin);
+}
