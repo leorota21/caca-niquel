@@ -1,64 +1,79 @@
-// Obter os elementos de áudio
-const spinSound = document.getElementById("spin-sound");
-const winSound = document.getElementById("win-sound");
+// Variáveis do Jogo
+let credits = 100;
+let betAmount = 10; // Valor da aposta por linha
+let linesBet = 1; // Linhas de aposta
 
-// Função que toca o som de "giro"
-function playSpinSound() {
-  spinSound.play();
+// Elementos da interface
+const creditCount = document.getElementById('credit-count');
+const betLinesInput = document.getElementById('bet-lines');
+const spinButton = document.getElementById('spin-button');
+const resultText = document.getElementById('result');
+const winIcon = document.getElementById('win-icon');
+const slots = document.querySelectorAll('.slot');
+const spinSound = document.getElementById('spin-sound');
+const winSound = document.getElementById('win-sound');
+
+// Atualizar créditos na interface
+function updateCredits() {
+    creditCount.textContent = credits;
 }
 
-// Função que toca o som de "vitória"
-function playWinSound() {
-  winSound.play();
-}
-
-// Exemplo de como integrar ao botão de girar
-document.getElementById("spin-button").addEventListener("click", function() {
-  playSpinSound();
-  spinSlots(); // Função de girar os slots
+// Adicionar créditos ao clicar no botão
+document.getElementById('add-credits-button').addEventListener('click', () => {
+    credits += 100;  // Adicionar créditos
+    updateCredits();
 });
 
-// Função para girar os slots com animação
+// Definir quantidade de linhas apostadas
+betLinesInput.addEventListener('change', () => {
+    linesBet = parseInt(betLinesInput.value);
+    betAmount = linesBet * 10;  // Aposta por linha multiplicada pela quantidade de linhas
+    document.getElementById('line-bet').textContent = betAmount;
+});
+
+// Função para girar os slots
 function spinSlots() {
-  // Adicionar a classe 'spin' a todos os slots para a animação
-  const slots = document.querySelectorAll(".slot");
-  slots.forEach(slot => {
-    slot.classList.add("spin");
+    // Checar se há créditos suficientes
+    if (credits < betAmount) {
+        alert("Créditos insuficientes!");
+        return;
+    }
 
-    // Remover a classe de animação após o término para que possa ser reiniciada
-    setTimeout(() => {
-      slot.classList.remove("spin");
-    }, 1500);  // A duração da animação (1.5 segundos)
-  });
+    credits -= betAmount;
+    updateCredits();
 
-  // Verificar se houve vitória após a animação
-  setTimeout(() => {
-    checkWin();
-  }, 1500);
+    // Tocar som de giro
+    spinSound.play();
+
+    // Iniciar animação de rotação
+    slots.forEach(slot => {
+        slot.classList.add('spin');
+        setTimeout(() => slot.classList.remove('spin'), 1500); // Tempo de rotação
+    });
+
+    // Após animação, checar vitória
+    setTimeout(checkWin, 1500);
 }
 
-// Função para exibir o resultado
-function showResult(isWin) {
-  const resultText = document.getElementById("result");
-  const resultIcon = document.getElementById("win-icon");
-
-  if (isWin) {
-    resultText.textContent = "Você venceu!";
-    resultIcon.style.display = "block";  // Mostrar o ícone de vitória
-    playWinSound(); // Tocar som de vitória
-  } else {
-    resultText.textContent = "Você perdeu!";
-    resultIcon.style.display = "none";  // Esconder o ícone
-  }
-}
-
-// Função para verificar vitória (exemplo simples)
+// Verificar se houve vitória
 function checkWin() {
-  const slots = document.querySelectorAll(".slot");
-  const symbols = Array.from(slots).map(slot => slot.textContent);
+    const symbols = Array.from(slots).map(slot => slot.textContent);
+    
+    const isWin = symbols[0] === symbols[1] && symbols[1] === symbols[2];  // Simples para 3 símbolos iguais
 
-  // Aqui você pode definir uma lógica para verificar combinações vencedoras
-  const isWin = symbols[0] === symbols[1] && symbols[1] === symbols[2]; // Exemplo de condição de vitória
+    // Mostrar resultado
+    if (isWin) {
+        resultText.textContent = "Você ganhou!";
+        winIcon.style.display = 'block';
+        winSound.play();
+        credits += betAmount * 2;  // Pagamento duplo, por exemplo
+    } else {
+        resultText.textContent = "Tente novamente!";
+        winIcon.style.display = 'none';
+    }
 
-  showResult(isWin);
+    updateCredits();
 }
+
+// Ao clicar no botão de girar
+spinButton.addEventListener('click', spinSlots);
