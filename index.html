@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo de Caça-Níquel</title>
+    <title>Jogo de Caça-Níquel Avançado</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>Caça-Níquel</h1>
+        <h1>Caça-Níquel Avançado</h1>
         
-        <!-- Tema do Jogo -->
+        <!-- Seletor de Tema -->
         <div class="theme-selector">
             <label for="theme">Escolha o Tema:</label>
             <select id="theme">
                 <option value="classic">Clássico</option>
                 <option value="neon">Neon</option>
                 <option value="retro">Retro</option>
+                <option value="space">Espacial</option>
             </select>
         </div>
 
@@ -28,7 +29,7 @@
 
         <!-- Linhas de Aposta -->
         <div class="bet-panel">
-            <label for="bet-lines">Escolha as linhas de aposta:</label>
+            <label for="bet-lines">Escolha as Linhas de Aposta:</label>
             <input type="number" id="bet-lines" min="1" max="3" value="1">
             <p>Aposta por linha: <span id="line-bet">10</span> créditos</p>
         </div>
@@ -40,20 +41,20 @@
             <div class="slot" id="slot3">🍊</div>
         </div>
 
-        <!-- Botão para girar -->
+        <!-- Rodar o Jogo -->
         <button id="spin-button">Girar</button>
 
         <!-- Resultado -->
         <div id="result">Resultado</div>
 
         <!-- Ícone de Vitória -->
-        <img id="win-icon" class="win-icon" src="win-icon.png" alt="Ícone de vitória" style="display:none;">
+        <img id="win-icon" class="win-icon" src="win-icon.png" alt="Ícone de Vitória" style="display:none;">
 
+        <!-- Efeitos Sonoros -->
+        <audio id="spin-sound" src="spin-sound.mp3" preload="auto"></audio>
+        <audio id="win-sound" src="win-sound.mp3" preload="auto"></audio>
+        <audio id="background-music" src="background-music.mp3" preload="auto" loop></audio>
     </div>
-
-    <!-- Efeitos Sonoros -->
-    <audio id="spin-sound" src="spin-sound.mp3" preload="auto"></audio>
-    <audio id="win-sound" src="win-sound.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
