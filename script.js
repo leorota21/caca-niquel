@@ -56,10 +56,10 @@ function spinSlots() {
         setTimeout(() => {
             slot.classList.remove('spin');
             slot.textContent = getRandomIcon();  // Atualiza os ícones de forma aleatória
-        }, 1500);
+        }, 2000);
     });
 
-    setTimeout(checkWin, 1500);  // Verificar vitória após 1.5s
+    setTimeout(checkWin, 2000);  // Verificar vitória após 2s
 }
 
 // Verificar Vitória
@@ -83,3 +83,6 @@ function checkWin() {
 
 // Ao clicar no botão de girar
 spinButton.addEventListener('click', spinSlots);
+
+// Iniciar Música de Fundo
+backgroundMusic.play();
