@@ -2,7 +2,7 @@
 let credits = 100;
 let betAmount = 10;
 let linesBet = 1;
-const icons = ['🍒', '🍋', '🍊', '🍉', '🍇', '🍀', '💎', '🍀', '🍊'];  // Ícones variados
+const icons = ['🍒', '🍋', '🍉', '🍇', '🍀', '💎', '7️⃣', '🍊', '🍒'];  // Ícones de cassino
 let winAmount = 0;
 
 // Elementos da Interface
