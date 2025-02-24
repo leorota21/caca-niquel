@@ -1,187 +1,144 @@
-/* Definir uma paleta de cores moderna */
-:root {
-  --primary-color: #4CAF50; /* Verde claro para botões */
-  --secondary-color: #2C6E49; /* Verde mais escuro para interações */
-  --background-color: #f0f0f0; /* Fundo claro */
-  --card-background-color: #fff; /* Cor de fundo do cartão */
-  --text-color: #333; /* Texto escuro */
-  --highlight-color: #ff5733; /* Cor para destaque, como resultados */
-}
-
-/* Estilo geral da página */
+/* Estilo Global */
 body {
-  font-family: 'Roboto', sans-serif;
-  text-align: center;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
-/* Container principal do jogo */
+/* Container do Jogo */
 .game-container {
-  max-width: 600px;
-  margin: auto;
-  padding: 40px;
-  background-color: var(--card-background-color);
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+    max-width: 600px;
+    margin: auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Título */
 h1 {
-  font-size: 36px;
-  color: var(--primary-color);
-  margin-bottom: 30px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #4CAF50;
 }
 
-/* Painéis de créditos e aposta */
-.credit-panel, .bet-panel, .add-credits {
-  margin-bottom: 20px;
-}
-
-input[type="number"], input[type="password"] {
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  width: 100%;
-  transition: border-color 0.3s ease;
-}
-
-input[type="number"]:focus, input[type="password"]:focus {
-  border-color: var(--primary-color);
+/* Painel de Créditos */
+.credit-panel {
+    margin-bottom: 20px;
 }
 
 button {
-  padding: 15px 30px;
-  font-size: 18px;
-  cursor: pointer;
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    transition: 0.3s;
 }
 
 button:hover {
-  background-color: var(--secondary-color);
+    background-color: #45a049;
 }
 
-button:active {
-  transform: scale(0.98);
+/* Painel de Aposta */
+.bet-panel {
+    margin-bottom: 30px;
 }
 
-/* Estilo da máquina de caça-níquel */
+input[type="number"] {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+}
+
+/* Slots da Máquina */
 .slot-machine {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .slot {
-  width: 80px;
-  height: 80px;
-  background-color: #e1e1e1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 28px;
-  font-weight: bold;
-  border-radius: 12px;
-  transition: background-color 0.3s ease;
+    width: 80px;
+    height: 80px;
+    background-color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: 0.3s;
+    transform-style: preserve-3d;
 }
 
 .slot:hover {
-  background-color: #ccc;
+    background-color: #bbb;
 }
 
-/* Animação de rotação 3D aprimorada */
+/* Animação 3D de rotação */
 @keyframes spinAnimation {
-  0% {
-    transform: rotateX(0deg);
-  }
-  25% {
-    transform: rotateX(900deg);
-  }
-  50% {
-    transform: rotateX(1800deg);
-  }
-  75% {
-    transform: rotateX(2700deg);
-  }
-  100% {
-    transform: rotateX(3600deg);
-  }
+    0% {
+        transform: rotateX(0deg);
+    }
+    25% {
+        transform: rotateX(900deg);
+    }
+    50% {
+        transform: rotateX(1800deg);
+    }
+    75% {
+        transform: rotateX(2700deg);
+    }
+    100% {
+        transform: rotateX(3600deg);
+    }
 }
 
 .slot.spin {
-  animation: spinAnimation 1.5s ease-in-out;
-  animation-delay: 0.5s;
+    animation: spinAnimation 1.5s ease-in-out;
 }
 
-/* Estilo para destacar o resultado */
+/* Resultado */
 #result {
-  font-size: 30px;
-  font-weight: bold;
-  margin-top: 30px;
-  color: var(--highlight-color);
-  text-transform: uppercase;
-  animation: resultGlow 1.5s ease-out infinite;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 30px;
+    color: #FF5733;
+    text-transform: uppercase;
 }
 
-/* Animação de brilho no resultado */
-@keyframes resultGlow {
-  0% {
-    text-shadow: 0 0 10px var(--highlight-color), 0 0 20px var(--highlight-color), 0 0 30px var(--highlight-color);
-  }
-  50% {
-    text-shadow: 0 0 5px var(--highlight-color), 0 0 10px var(--highlight-color), 0 0 15px var(--highlight-color);
-  }
-  100% {
-    text-shadow: 0 0 10px var(--highlight-color), 0 0 20px var(--highlight-color), 0 0 30px var(--highlight-color);
-  }
-}
-
-/* Ícones das vitórias */
+/* Efeitos de Vitória (Brilho e Explosão) */
 .win-icon {
-  width: 50px;
-  height: 50px;
-  margin-top: 10px;
-  animation: iconBounce 1s ease-in-out infinite;
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    animation: iconBounce 1s ease-in-out infinite;
 }
 
-/* Animação de pulso para o ícone de vitória */
 @keyframes iconBounce {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-/* Ajustes responsivos para dispositivos móveis */
 @media (max-width: 600px) {
-  .game-container {
-    padding: 20px;
-  }
+    .slot-machine {
+        flex-direction: column;
+    }
 
-  .slot-machine {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .slot {
-    margin-bottom: 15px;
-  }
+    .slot {
+        margin-bottom: 15px;
+    }
 }
