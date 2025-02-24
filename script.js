@@ -2,8 +2,8 @@
 let credits = 100;
 let betAmount = 10;
 let linesBet = 1;
-let multiplier = 1;
-let bonusSpins = 0;
+const icons = ['🍒', '🍋', '🍊', '🍉', '🍇', '🍀', '💎', '🍀', '🍊'];  // Ícones variados
+let winAmount = 0;
 
 // Elementos da Interface
 const creditCount = document.getElementById('credit-count');
@@ -15,7 +15,6 @@ const slots = document.querySelectorAll('.slot');
 const spinSound = document.getElementById('spin-sound');
 const winSound = document.getElementById('win-sound');
 const backgroundMusic = document.getElementById('background-music');
-const themeSelector = document.getElementById('theme');
 
 // Atualizar Créditos
 function updateCredits() {
@@ -35,11 +34,10 @@ betLinesInput.addEventListener('change', () => {
     document.getElementById('line-bet').textContent = betAmount;
 });
 
-// Trocar Tema
-themeSelector.addEventListener('change', () => {
-    document.body.classList.remove('classic', 'neon', 'retro', 'space');
-    document.body.classList.add(themeSelector.value);
-});
+// Função para gerar ícones aleatórios
+function getRandomIcon() {
+    return icons[Math.floor(Math.random() * icons.length)];
+}
 
 // Função de Giro
 function spinSlots() {
@@ -51,11 +49,14 @@ function spinSlots() {
     credits -= betAmount;
     updateCredits();
     spinSound.play();
-    
+
     // Animação de Giro
     slots.forEach(slot => {
         slot.classList.add('spin');
-        setTimeout(() => slot.classList.remove('spin'), 1500);
+        setTimeout(() => {
+            slot.classList.remove('spin');
+            slot.textContent = getRandomIcon();  // Atualiza os ícones de forma aleatória
+        }, 1500);
     });
 
     setTimeout(checkWin, 1500);  // Verificar vitória após 1.5s
@@ -64,10 +65,10 @@ function spinSlots() {
 // Verificar Vitória
 function checkWin() {
     const symbols = Array.from(slots).map(slot => slot.textContent);
-    const isWin = symbols[0] === symbols[1] && symbols[1] === symbols[2];
+    const isWin = symbols.every(symbol => symbol === symbols[0]);
 
     if (isWin) {
-        const winAmount = betAmount * multiplier * 2;
+        winAmount = betAmount * 2 * linesBet;
         credits += winAmount;
         resultText.textContent = `Você ganhou ${winAmount} créditos!`;
         winIcon.style.display = 'block';
