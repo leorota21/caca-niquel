@@ -5,16 +5,17 @@ body {
     background-color: #2c3e50;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 /* Container Principal */
 .game-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: auto;
     padding: 40px;
     background-color: #34495e;
     border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     color: #fff;
 }
 
@@ -23,6 +24,7 @@ h1 {
     font-size: 40px;
     margin-bottom: 30px;
     color: #e74c3c;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 }
 
 /* Painel de Controle */
@@ -84,7 +86,7 @@ input[type="number"] {
 }
 
 .slot.spin {
-    animation: spinAnimation 1.5s ease-in-out;
+    animation: spinAnimation 2s ease-in-out;
 }
 
 /* Resultado */
