@@ -9,42 +9,34 @@
 <body>
   <div class="game-container">
     <h1>Caça-Níquel</h1>
-    
-    <!-- Painel de Créditos -->
+
+    <!-- Painel de créditos -->
     <div class="credit-panel">
-      <span>Créditos: </span><span id="credit-display">100</span>
+      <input type="number" id="credits-input" placeholder="Créditos">
+      <button id="add-credits-button">Adicionar Créditos</button>
     </div>
 
-    <!-- Painel de Aposta -->
-    <div class="bet-panel">
-      <label for="bet-amount">Créditos por linha:</label>
-      <input type="number" id="bet-amount" value="1" min="1">
-      <label for="lines">Linhas:</label>
-      <input type="number" id="lines" value="1" min="1" max="3">
-    </div>
-    
-    <!-- Botão de Adicionar Créditos com Senha -->
-    <div class="add-credits">
-      <input type="password" id="password" placeholder="Senha">
-      <button onclick="addCredits()">Adicionar Créditos</button>
-    </div>
-
-    <!-- Colunas -->
+    <!-- Painel de slots -->
     <div class="slot-machine">
-      <div class="slot" id="slot-1"></div>
-      <div class="slot" id="slot-2"></div>
-      <div class="slot" id="slot-3"></div>
-      <div class="slot" id="slot-4"></div>
-      <div class="slot" id="slot-5"></div>
+      <div class="slot" id="slot1">🍒</div>
+      <div class="slot" id="slot2">🍋</div>
+      <div class="slot" id="slot3">🍊</div>
     </div>
 
-    <!-- Botão de Giro -->
-    <button onclick="spin()">Girar</button>
+    <!-- Botão para girar -->
+    <button id="spin-button">Girar</button>
 
-    <!-- Resultado -->
-    <div id="result"></div>
+    <!-- Exibição de resultados -->
+    <div id="result">Resultado</div>
+
+    <!-- Ícone de vitória -->
+    <img id="win-icon" class="win-icon" src="win-icon.png" alt="Ícone de vitória" style="display:none;">
   </div>
-  
+
+  <!-- Efeitos Sonoros -->
+  <audio id="spin-sound" src="spin-sound.mp3" preload="auto"></audio>
+  <audio id="win-sound" src="win-sound.mp3" preload="auto"></audio>
+
   <script src="script.js"></script>
 </body>
 </html>
