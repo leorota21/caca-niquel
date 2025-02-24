@@ -2,8 +2,10 @@
 let credits = 100;
 let betAmount = 10;
 let linesBet = 1;
+let multiplier = 1;
+let bonusSpins = 0;
 
-// Elementos da interface
+// Elementos da Interface
 const creditCount = document.getElementById('credit-count');
 const betLinesInput = document.getElementById('bet-lines');
 const spinButton = document.getElementById('spin-button');
@@ -12,29 +14,30 @@ const winIcon = document.getElementById('win-icon');
 const slots = document.querySelectorAll('.slot');
 const spinSound = document.getElementById('spin-sound');
 const winSound = document.getElementById('win-sound');
+const backgroundMusic = document.getElementById('background-music');
 const themeSelector = document.getElementById('theme');
 
-// Atualizar Créditos na Interface
+// Atualizar Créditos
 function updateCredits() {
     creditCount.textContent = credits;
 }
 
 // Adicionar Créditos
 document.getElementById('add-credits-button').addEventListener('click', () => {
-    credits += 100;  // Adiciona 100 créditos
+    credits += 100;
     updateCredits();
 });
 
 // Ajustar Linhas de Aposta
 betLinesInput.addEventListener('change', () => {
     linesBet = parseInt(betLinesInput.value);
-    betAmount = linesBet * 10;  // Aposta por linha
+    betAmount = linesBet * 10;
     document.getElementById('line-bet').textContent = betAmount;
 });
 
 // Trocar Tema
 themeSelector.addEventListener('change', () => {
-    document.body.classList.remove('classic', 'neon', 'retro');
+    document.body.classList.remove('classic', 'neon', 'retro', 'space');
     document.body.classList.add(themeSelector.value);
 });
 
@@ -48,8 +51,8 @@ function spinSlots() {
     credits -= betAmount;
     updateCredits();
     spinSound.play();
-
-    // Animação de giro
+    
+    // Animação de Giro
     slots.forEach(slot => {
         slot.classList.add('spin');
         setTimeout(() => slot.classList.remove('spin'), 1500);
@@ -64,10 +67,11 @@ function checkWin() {
     const isWin = symbols[0] === symbols[1] && symbols[1] === symbols[2];
 
     if (isWin) {
-        resultText.textContent = "Você ganhou!";
+        const winAmount = betAmount * multiplier * 2;
+        credits += winAmount;
+        resultText.textContent = `Você ganhou ${winAmount} créditos!`;
         winIcon.style.display = 'block';
         winSound.play();
-        credits += betAmount * 2;  // Pagamento duplo
     } else {
         resultText.textContent = "Tente novamente!";
         winIcon.style.display = 'none';
